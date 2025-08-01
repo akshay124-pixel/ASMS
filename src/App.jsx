@@ -21,16 +21,21 @@ const App = () => {
   const navigate = useNavigate();
 
   const handleDeleteSlip = async (id) => {
-    const confirmDelete = window.confirm("Are you sure you want to delete this salary slip?");
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this salary slip?"
+    );
     if (!confirmDelete) return;
 
     try {
-      const response = await fetch(`http://localhost:4000/api/salary-slips/${id}`, {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await fetch(
+        `https://asmserver.onrender.com/api/salary-slips/${id}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       const result = await response.json();
       if (response.ok) {
         setSalarySlips(salarySlips.filter((s) => s._id !== id));
@@ -73,12 +78,7 @@ const App = () => {
       const workbook = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(workbook, worksheet, "Salary Slips");
 
-      worksheet["!cols"] = [
-        { wch: 20 },
-        { wch: 15 },
-        { wch: 12 },
-        { wch: 15 },
-      ];
+      worksheet["!cols"] = [{ wch: 20 }, { wch: 15 }, { wch: 12 }, { wch: 15 }];
 
       const excelBuffer = XLSX.write(workbook, {
         bookType: "xlsx",
@@ -90,7 +90,9 @@ const App = () => {
       const url = window.URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = url;
-      link.download = `Salary_Slips_${new Date().toISOString().split("T")[0]}.xlsx`;
+      link.download = `Salary_Slips_${
+        new Date().toISOString().split("T")[0]
+      }.xlsx`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -122,10 +124,10 @@ const App = () => {
 
       try {
         const [usersResponse, slipsResponse] = await Promise.all([
-          fetch("http://localhost:4000/api/employees", {
+          fetch("https://asmserver.onrender.com/api/employees", {
             headers: { Authorization: `Bearer ${token}` },
           }),
-          fetch("http://localhost:4000/api/salary-slips", {
+          fetch("https://asmserver.onrender.com/api/salary-slips", {
             headers: { Authorization: `Bearer ${token}` },
           }),
         ]);
@@ -146,7 +148,9 @@ const App = () => {
         }
         if (!Array.isArray(slipsData)) {
           console.error("Salary slips data received:", slipsData);
-          throw new Error(slipsData.error || "Salary slips data is not an array");
+          throw new Error(
+            slipsData.error || "Salary slips data is not an array"
+          );
         }
 
         setUsers(usersData);
@@ -203,14 +207,17 @@ const App = () => {
     const calculatedSalary = (dailySalary * daysWorked).toFixed(2);
 
     try {
-      const response = await fetch("http://localhost:4000/api/salary-slip", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ userId: selectedUser, month, daysWorked }),
-      });
+      const response = await fetch(
+        "https://asmserver.onrender.com/api/salary-slip",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ userId: selectedUser, month, daysWorked }),
+        }
+      );
       const result = await response.json();
       if (response.ok) {
         setSalarySlips([

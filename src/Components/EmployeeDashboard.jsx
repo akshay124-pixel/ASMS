@@ -30,9 +30,12 @@ const EmployeeDashboard = () => {
         if (!token) {
           throw new Error("No authentication token found");
         }
-        const response = await fetch("http://localhost:4000/api/employees", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const response = await fetch(
+          "https://asmserver.onrender.com/api/employees",
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
 
         const data = await response.json();
         if (!response.ok) {
@@ -53,7 +56,7 @@ const EmployeeDashboard = () => {
       }
     };
     fetchUsers();
-  }, [ ]);
+  }, []);
 
   const handleEdit = (user) => {
     setEditingUser(user);
@@ -75,10 +78,13 @@ const EmployeeDashboard = () => {
         throw new Error("No user ID provided for deletion");
       }
 
-      const response = await fetch(`http://localhost:4000/api/delete-employees/${userId}`, {
-        method: "DELETE",
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await fetch(
+        `https://asmserver.onrender.com/api/delete-employees/${userId}`,
+        {
+          method: "DELETE",
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
 
       if (!response.ok) {
         const result = await response.json();
@@ -113,13 +119,21 @@ const EmployeeDashboard = () => {
     e.preventDefault();
     try {
       const { username, email, baseSalary } = formData;
-      if (!username || !email || !baseSalary || isNaN(baseSalary) || baseSalary < 0) {
-        throw new Error("All fields are required and base salary must be a valid number");
+      if (
+        !username ||
+        !email ||
+        !baseSalary ||
+        isNaN(baseSalary) ||
+        baseSalary < 0
+      ) {
+        throw new Error(
+          "All fields are required and base salary must be a valid number"
+        );
       }
 
       const url = editingUser
-        ? `http://localhost:4000/api/edit-employees/${editingUser._id}`
-        : "http://localhost:4000/api/add-employees";
+        ? `https://asmserver.onrender.com/api/edit-employees/${editingUser._id}`
+        : "https://asmserver.onrender.com/api/add-employees";
       const method = editingUser ? "PUT" : "POST";
       const response = await fetch(url, {
         method,
@@ -127,7 +141,11 @@ const EmployeeDashboard = () => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ username, email, baseSalary: parseFloat(baseSalary) }),
+        body: JSON.stringify({
+          username,
+          email,
+          baseSalary: parseFloat(baseSalary),
+        }),
       });
       const result = await response.json();
       if (response.ok && result.user) {
@@ -429,11 +447,11 @@ const EmployeeDashboard = () => {
             }
             .custom-scrollbar::-webkit-scrollbar-track {
               background: rgba(255, 255, 255, 0.2);
-              borderRadius: 4px;
+              borderradius: 4px;
             }
             .custom-scrollbar::-webkit-scrollbar-thumb {
               background: rgba(59, 130, 246, 0.5);
-              borderRadius: 4px;
+              borderradius: 4px;
             }
             .custom-scrollbar::-webkit-scrollbar-thumb:hover {
               background: rgba(59, 130, 246, 0.8);

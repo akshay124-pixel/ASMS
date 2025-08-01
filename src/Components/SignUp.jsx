@@ -11,7 +11,6 @@ function Signup() {
     email: "",
     password: "",
     role: "Accounts",
-  
   });
   const [error, setError] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
@@ -23,12 +22,7 @@ function Signup() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (
-      !form.username ||
-      !form.email ||
-      !form.password ||
-      !form.role 
-    ) {
+    if (!form.username || !form.email || !form.password || !form.role) {
       toast.error("All fields are required", {
         position: "top-right",
         autoClose: 3000,
@@ -39,7 +33,7 @@ function Signup() {
 
     try {
       const response = await axios.post(
-        "http://localhost:4000/user/signup",
+        "https://asmserver.onrender.com/user/signup",
         form
       );
       if (response.status === 201) {
@@ -57,7 +51,7 @@ function Signup() {
             username: user.username,
             email: user.email,
             role: user.role,
-       
+
             assignedAdmin: user.assignedAdmin,
           })
         );
@@ -158,7 +152,7 @@ function Signup() {
                 {showPassword ? "Hide" : "Show"}
               </button>
             </div>
-          
+
             <select
               name="role"
               style={{ backgroundColor: "white" }}
