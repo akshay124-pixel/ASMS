@@ -7,19 +7,19 @@ export default defineConfig({
     port: 5173,
     proxy: {
       "/auth": {
-        target: "http://localhost:4000",
+        target: "https://asmserver.onrender.com",
         changeOrigin: true,
       },
       "/user": {
-        target: "http://localhost:4000",
+        target: "https://asmserver.onrender.com",
         changeOrigin: true,
       },
       "/api": {
-        target: "http://localhost:4000",
+        target: "https://asmserver.onrender.com",
         changeOrigin: true,
       },
       "/salary_slips": {
-        target: "http://localhost:4000",
+        target: "https://asmserver.onrender.com",
         changeOrigin: true,
       },
     },
