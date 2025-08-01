@@ -202,10 +202,6 @@ const SalarySlipTable = ({ salarySlips, onDelete }) => {
                       href={slip.pdfUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      onClick={() =>
-                        console.log(`Downloading PDF from: ${slip.pdfUrl}`)
-                      }
-                      download={`${slip.user}-${slip.month}-salary-slip.pdf`}
                       style={{
                         color: "#ffffff",
                         background: "linear-gradient(90deg, #3b82f6, #7c3aed)",
@@ -232,7 +228,11 @@ const SalarySlipTable = ({ salarySlips, onDelete }) => {
                           "0 3px 10px rgba(0, 0, 0, 0.15)";
                         e.target.style.transform = "scale(1)";
                       }}
+                      onClick={() =>
+                        console.log(`Downloading PDF from: ${slip.pdfUrl}`)
+                      } // Add logging
                       aria-label={`Download salary slip for ${slip.user} - ${slip.month}`}
+                      download={`${slip.user}-${slip.month}-salary-slip.pdf`}
                     >
                       Download
                     </a>
