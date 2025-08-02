@@ -198,48 +198,44 @@ const SalarySlipTable = ({ salarySlips, onDelete }) => {
                     ₹{slip.salary}
                   </td>
                   <td style={{ padding: "1.4rem 2rem" }}>
-                    {slip.pdfUrl ? (
-                      <a
-                        href={slip.pdfUrl}
-                        rel="noopener noreferrer"
-                        download={`${slip.user}-${slip.month}-salary-slip.pdf`}
-                        style={{
-                          color: "#ffffff",
-                          background:
-                            "linear-gradient(90deg, #3b82f6, #7c3aed)",
-                          textDecoration: "none",
-                          fontWeight: "600",
-                          padding: "0.7rem 1.4rem",
-                          borderRadius: "10px",
-                          transition: "all 0.3s ease",
-                          display: "inline-block",
-                          fontFamily: "'Roboto', sans-serif",
-                          boxShadow: "0 3px 10px rgba(0, 0, 0, 0.15)",
-                        }}
-                        onMouseOver={(e) => {
-                          e.target.style.background =
-                            "linear-gradient(90deg, #2563eb, #6d28d9)";
-                          e.target.style.boxShadow =
-                            "0 6px 16px rgba(59, 130, 246, 0.5)";
-                          e.target.style.transform = "scale(1.05)";
-                        }}
-                        onMouseOut={(e) => {
-                          e.target.style.background =
-                            "linear-gradient(90deg, #3b82f6, #7c3aed)";
-                          e.target.style.boxShadow =
-                            "0 3px 10px rgba(0, 0, 0, 0.15)";
-                          e.target.style.transform = "scale(1)";
-                        }}
-                        onClick={(e) => {
-                          console.log(`Downloading PDF from: ${slip.pdfUrl}`);
-                        }}
-                        aria-label={`Download salary slip for ${slip.user} - ${slip.month}`}
-                      >
-                        Download
-                      </a>
-                    ) : (
-                      <span style={{ color: "#dc2626" }}>PDF Unavailable</span>
-                    )}
+                    <a
+                      href={slip.pdfUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{
+                        color: "#ffffff",
+                        background: "linear-gradient(90deg, #3b82f6, #7c3aed)",
+                        textDecoration: "none",
+                        fontWeight: "600",
+                        padding: "0.7rem 1.4rem",
+                        borderRadius: "10px",
+                        transition: "all 0.3s ease",
+                        display: "inline-block",
+                        fontFamily: "'Roboto', sans-serif",
+                        boxShadow: "0 3px 10px rgba(0, 0, 0, 0.15)",
+                      }}
+                      onMouseOver={(e) => {
+                        e.target.style.background =
+                          "linear-gradient(90deg, #2563eb, #6d28d9)";
+                        e.target.style.boxShadow =
+                          "0 6px 16px rgba(59, 130, 246, 0.5)";
+                        e.target.style.transform = "scale(1.05)";
+                      }}
+                      onMouseOut={(e) => {
+                        e.target.style.background =
+                          "linear-gradient(90deg, #3b82f6, #7c3aed)";
+                        e.target.style.boxShadow =
+                          "0 3px 10px rgba(0, 0, 0, 0.15)";
+                        e.target.style.transform = "scale(1)";
+                      }}
+                      onClick={() =>
+                        console.log(`Downloading PDF from: ${slip.pdfUrl}`)
+                      } // Add logging
+                      aria-label={`Download salary slip for ${slip.user} - ${slip.month}`}
+                      download={`${slip.user}-${slip.month}-salary-slip.pdf`}
+                    >
+                      Download
+                    </a>
                   </td>
                   <td
                     style={{
