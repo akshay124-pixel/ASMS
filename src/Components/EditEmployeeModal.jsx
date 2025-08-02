@@ -42,8 +42,6 @@ const EditEmployeeModal = ({ isOpen, onClose, onSubmit, initialData }) => {
 
   const validateForm = () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const panRegex = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/;
-    const adhaarRegex = /^\d{12}$/;
 
     if (
       !formData.username ||
@@ -59,12 +57,7 @@ const EditEmployeeModal = ({ isOpen, onClose, onSubmit, initialData }) => {
     if (isNaN(formData.baseSalary) || formData.baseSalary <= 0) {
       return "Base salary must be a positive number";
     }
-    if (formData.pan && !panRegex.test(formData.pan)) {
-      return "Invalid PAN format";
-    }
-    if (formData.adhaar && !adhaarRegex.test(formData.adhaar)) {
-      return "Invalid Aadhaar format";
-    }
+
     if (formData.joindate && isNaN(Date.parse(formData.joindate))) {
       return "Invalid join date format";
     }
