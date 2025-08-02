@@ -118,17 +118,30 @@ const EmployeeDashboard = () => {
   const handleEmployeeSubmit = async (e, formData) => {
     e.preventDefault();
     try {
-      const { username, email, baseSalary } = formData;
-      if (
-        !username ||
-        !email ||
-        !baseSalary ||
-        isNaN(baseSalary) ||
-        baseSalary < 0
-      ) {
+      const {
+        username,
+        email,
+        baseSalary,
+        employeeid,
+        joindate,
+        pan,
+        adhaar,
+        deg,
+      } = formData;
+      if (!username || !email || !baseSalary || !employeeid) {
         throw new Error(
-          "All fields are required and base salary must be a valid number"
+          "Username, email, base salary, and employee ID are required"
         );
+      }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        throw new Error("Invalid email format");
+      }
+      if (isNaN(baseSalary) || baseSalary <= 0) {
+        throw new Error("Base salary must be a positive number");
+      }
+
+      if (joindate && isNaN(Date.parse(joindate))) {
+        throw new Error("Invalid join date format");
       }
 
       const url = editingUser
@@ -145,14 +158,19 @@ const EmployeeDashboard = () => {
           username,
           email,
           baseSalary: parseFloat(baseSalary),
+          employeeid,
+          joindate,
+          pan,
+          adhaar,
+          deg,
         }),
       });
       const result = await response.json();
-      if (response.ok && result.user) {
+      if (response.ok && result.data) {
         if (editingUser) {
           setUsers(
             users.map((user) =>
-              user._id === editingUser._id ? result.user : user
+              user._id === editingUser._id ? result.data : user
             )
           );
           toast.success("Employee updated successfully", {
@@ -161,7 +179,7 @@ const EmployeeDashboard = () => {
             theme: "colored",
           });
         } else {
-          setUsers([...users, result.user]);
+          setUsers([...users, result.data]);
           toast.success("Employee added successfully", {
             position: "top-right",
             autoClose: 3000,
@@ -198,14 +216,30 @@ const EmployeeDashboard = () => {
       const exportData = users.map((user) => ({
         Name: user.username || "N/A",
         Email: user.email || "N/A",
+        "Employee ID": user.employeeid || "N/A",
         "Base Salary (₹)": user.baseSalary || 0,
+        "Join Date": user.joindate
+          ? new Date(user.joindate).toLocaleDateString()
+          : "N/A",
+        PAN: user.pan || "N/A",
+        Aadhaar: user.adhaar || "N/A",
+        Designation: user.deg || "N/A",
       }));
 
       const ws = XLSX.utils.json_to_sheet(exportData);
       const wb = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(wb, ws, "Employees");
 
-      ws["!cols"] = [{ wch: 20 }, { wch: 30 }, { wch: 15 }];
+      ws["!cols"] = [
+        { wch: 20 },
+        { wch: 30 },
+        { wch: 15 },
+        { wch: 15 },
+        { wch: 15 },
+        { wch: 15 },
+        { wch: 15 },
+        { wch: 20 },
+      ];
 
       XLSX.writeFile(wb, "Employees.xlsx");
       toast.success("Employees exported to Excel successfully", {
@@ -490,7 +524,7 @@ const EmployeeDashboard = () => {
                     padding: "1.4rem 2rem",
                     textAlign: "left",
                     borderTopLeftRadius: "12px",
-                    width: "30%",
+                    width: "25%",
                   }}
                 >
                   Name
@@ -499,7 +533,16 @@ const EmployeeDashboard = () => {
                   style={{
                     padding: "1.4rem 2rem",
                     textAlign: "left",
-                    width: "30%",
+                    width: "25%",
+                  }}
+                >
+                  Employee ID
+                </th>
+                <th
+                  style={{
+                    padding: "1.4rem 2rem",
+                    textAlign: "left",
+                    width: "25%",
                   }}
                 >
                   Email
@@ -508,7 +551,7 @@ const EmployeeDashboard = () => {
                   style={{
                     padding: "1.4rem 2rem",
                     textAlign: "left",
-                    width: "20%",
+                    width: "15%",
                   }}
                 >
                   Salary (₹)
@@ -518,7 +561,7 @@ const EmployeeDashboard = () => {
                     padding: "1.4rem 2rem",
                     textAlign: "left",
                     borderTopRightRadius: "12px",
-                    width: "20%",
+                    width: "10%",
                   }}
                 >
                   Actions
@@ -529,7 +572,7 @@ const EmployeeDashboard = () => {
               {users.length === 0 ? (
                 <tr>
                   <td
-                    colSpan="4"
+                    colSpan="5"
                     style={{
                       padding: "2rem",
                       textAlign: "center",
@@ -585,6 +628,9 @@ const EmployeeDashboard = () => {
                       }}
                     >
                       {user.username}
+                    </td>
+                    <td style={{ padding: "1.4rem 2rem", color: "#1f2937" }}>
+                      {user.employeeid}
                     </td>
                     <td style={{ padding: "1.4rem 2rem", color: "#1f2937" }}>
                       {user.email}

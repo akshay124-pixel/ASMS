@@ -7,6 +7,11 @@ const AddEmployeeModal = ({ isOpen, onClose, onSubmit }) => {
     username: "",
     email: "",
     baseSalary: "",
+    employeeid: "",
+    joindate: "",
+    pan: "",
+    adhaar: "",
+    deg: "",
   });
 
   const handleChange = (e) => {
@@ -17,19 +22,81 @@ const AddEmployeeModal = ({ isOpen, onClose, onSubmit }) => {
     });
   };
 
-  const handleFormSubmit = (e) => {
+  const validateForm = () => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (
+      !formData.username ||
+      !formData.email ||
+      !formData.baseSalary ||
+      !formData.employeeid
+    ) {
+      return "Username, email, base salary, and employee ID are required";
+    }
+    if (!emailRegex.test(formData.email)) {
+      return "Invalid email format";
+    }
+    if (isNaN(formData.baseSalary) || formData.baseSalary <= 0) {
+      return "Base salary must be a positive number";
+    }
+
+    if (formData.joindate && isNaN(Date.parse(formData.joindate))) {
+      return "Invalid join date format";
+    }
+    return null;
+  };
+
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
-    if (!formData.username || !formData.email || !formData.baseSalary || isNaN(formData.baseSalary) || formData.baseSalary < 0) {
-      toast.error("Please fill all fields with valid data", {
+    const validationError = validateForm();
+    if (validationError) {
+      toast.error(validationError, {
         position: "top-right",
         autoClose: 3000,
         theme: "colored",
       });
       return;
     }
-    onSubmit(e, formData);
-    setFormData({ username: "", email: "", baseSalary: "" }); // Reset form
+
+    try {
+      // Sanitize inputs
+      const sanitizedData = {
+        username: formData.username.trim(),
+        email: formData.email.trim().toLowerCase(),
+        baseSalary: parseFloat(formData.baseSalary),
+        employeeid: formData.employeeid.trim(),
+        joindate: formData.joindate || undefined,
+        pan: formData.pan ? formData.pan.toUpperCase() : undefined,
+        adhaar: formData.adhaar || undefined,
+        deg: formData.deg || undefined,
+      };
+
+      await onSubmit(e, sanitizedData);
+      setFormData({
+        username: "",
+        email: "",
+        baseSalary: "",
+        employeeid: "",
+        joindate: "",
+        pan: "",
+        adhaar: "",
+        deg: "",
+      });
+      toast.success("Employee added successfully", {
+        position: "top-right",
+        autoClose: 3000,
+        theme: "colored",
+      });
+      onClose();
+    } catch (error) {
+      toast.error(error.message || "Failed to add employee", {
+        position: "top-right",
+        autoClose: 3000,
+        theme: "colored",
+      });
+    }
   };
+
   return (
     <Modal
       show={isOpen}
@@ -66,7 +133,7 @@ const AddEmployeeModal = ({ isOpen, onClose, onSubmit }) => {
           padding: "2rem",
           background: "#f9fafb",
           borderRadius: "0 0 12px 12px",
-          minHeight: "300px",
+          minHeight: "400px",
           boxShadow: "inset 0 -4px 12px rgba(0, 0, 0, 0.08)",
         }}
       >
@@ -124,7 +191,6 @@ const AddEmployeeModal = ({ isOpen, onClose, onSubmit }) => {
                   style={{ borderRadius: "8px", padding: "10px" }}
                 />
               </Form.Group>
-            
               <Form.Group>
                 <Form.Label
                   style={{
@@ -140,6 +206,96 @@ const AddEmployeeModal = ({ isOpen, onClose, onSubmit }) => {
                   value={formData.baseSalary}
                   onChange={handleChange}
                   placeholder="Enter base salary"
+                  style={{ borderRadius: "8px", padding: "10px" }}
+                />
+              </Form.Group>
+              <Form.Group>
+                <Form.Label
+                  style={{
+                    fontSize: "0.9rem",
+                    textTransform: "uppercase",
+                  }}
+                >
+                  Employee ID
+                </Form.Label>
+                <Form.Control
+                  type="text"
+                  name="employeeid"
+                  value={formData.employeeid}
+                  onChange={handleChange}
+                  placeholder="Enter employee ID"
+                  style={{ borderRadius: "8px", padding: "10px" }}
+                />
+              </Form.Group>
+              <Form.Group>
+                <Form.Label
+                  style={{
+                    fontSize: "0.9rem",
+                    textTransform: "uppercase",
+                  }}
+                >
+                  Join Date
+                </Form.Label>
+                <Form.Control
+                  type="date"
+                  name="joindate"
+                  value={formData.joindate}
+                  onChange={handleChange}
+                  placeholder="Select join date"
+                  style={{ borderRadius: "8px", padding: "10px" }}
+                />
+              </Form.Group>
+              <Form.Group>
+                <Form.Label
+                  style={{
+                    fontSize: "0.9rem",
+                    textTransform: "uppercase",
+                  }}
+                >
+                  PAN
+                </Form.Label>
+                <Form.Control
+                  type="text"
+                  name="pan"
+                  value={formData.pan}
+                  onChange={handleChange}
+                  placeholder="Enter PAN (optional)"
+                  style={{ borderRadius: "8px", padding: "10px" }}
+                />
+              </Form.Group>
+              <Form.Group>
+                <Form.Label
+                  style={{
+                    fontSize: "0.9rem",
+                    textTransform: "uppercase",
+                  }}
+                >
+                  Aadhaar
+                </Form.Label>
+                <Form.Control
+                  type="text"
+                  name="adhaar"
+                  value={formData.adhaar}
+                  onChange={handleChange}
+                  placeholder="Enter Aadhaar (optional)"
+                  style={{ borderRadius: "8px", padding: "10px" }}
+                />
+              </Form.Group>
+              <Form.Group>
+                <Form.Label
+                  style={{
+                    fontSize: "0.9rem",
+                    textTransform: "uppercase",
+                  }}
+                >
+                  Designation
+                </Form.Label>
+                <Form.Control
+                  type="text"
+                  name="deg"
+                  value={formData.deg}
+                  onChange={handleChange}
+                  placeholder="Enter designation (optional)"
                   style={{ borderRadius: "8px", padding: "10px" }}
                 />
               </Form.Group>

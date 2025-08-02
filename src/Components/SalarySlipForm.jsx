@@ -81,12 +81,11 @@ const SalarySlipForm = ({
       aria-hidden="true"
     >
       <div className="modal-dialog modal-dialog-centered">
-        <div
-          className="modal-content salary-modal-content"
-        >
+        <div className="modal-content salary-modal-content">
           <div className="modal-header border-0">
             <h2
-              className="modal-title w-100 text-center salary-modal-title" id="salarySlipModalLabel"
+              className="modal-title w-100 text-center salary-modal-title"
+              id="salarySlipModalLabel"
             >
               Generate Salary Slip
             </h2>
@@ -279,7 +278,6 @@ const SalarySlipForm = ({
                   boxShadow: "0 6px 20px rgba(0, 0, 0, 0.2)",
                   fontFamily: "'Poppins', sans-serif",
                 }}
-                
                 aria-label="Generate Salary Slip"
               >
                 Generate Salary Slip

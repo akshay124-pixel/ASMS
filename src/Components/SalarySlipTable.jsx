@@ -228,9 +228,6 @@ const SalarySlipTable = ({ salarySlips, onDelete }) => {
                           "0 3px 10px rgba(0, 0, 0, 0.15)";
                         e.target.style.transform = "scale(1)";
                       }}
-                      onClick={() =>
-                        console.log(`Downloading PDF from: ${slip.pdfUrl}`)
-                      } // Add logging
                       aria-label={`Download salary slip for ${slip.user} - ${slip.month}`}
                       download={`${slip.user}-${slip.month}-salary-slip.pdf`}
                     >

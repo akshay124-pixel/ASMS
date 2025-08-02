@@ -39,7 +39,7 @@ const ViewEmployeeModal = ({ isOpen, onClose, user }) => {
           padding: "2rem",
           background: "#f9fafb",
           borderRadius: "0 0 12px 12px",
-          minHeight: "300px",
+          minHeight: "400px",
           boxShadow: "inset 0 -4px 12px rgba(0, 0, 0, 0.08)",
         }}
       >
@@ -82,13 +82,26 @@ const ViewEmployeeModal = ({ isOpen, onClose, user }) => {
                   textTransform: "uppercase",
                 }}
               >
+                Employee ID
+              </strong>
+              <p style={{ color: "#444", fontSize: "1rem" }}>
+                {user.employeeid || "N/A"}
+              </p>
+            </div>
+            <div>
+              <strong
+                style={{
+                  color: "#2575fc",
+                  fontSize: "0.9rem",
+                  textTransform: "uppercase",
+                }}
+              >
                 Email
               </strong>
               <p style={{ color: "#444", fontSize: "1rem" }}>
                 {user.email || "N/A"}
               </p>
             </div>
-           
             <div>
               <strong
                 style={{
@@ -100,7 +113,65 @@ const ViewEmployeeModal = ({ isOpen, onClose, user }) => {
                 Base Salary (₹)
               </strong>
               <p style={{ color: "#444", fontSize: "1rem" }}>
-                {user.baseSalary ? `₹${user.baseSalary}` : "N/A"}
+                {user.baseSalary ? `₹${user.baseSalary.toFixed(2)}` : "N/A"}
+              </p>
+            </div>
+            <div>
+              <strong
+                style={{
+                  color: "#2575fc",
+                  fontSize: "0.9rem",
+                  textTransform: "uppercase",
+                }}
+              >
+                Join Date
+              </strong>
+              <p style={{ color: "#444", fontSize: "1rem" }}>
+                {user.joindate
+                  ? new Date(user.joindate).toLocaleDateString()
+                  : "N/A"}
+              </p>
+            </div>
+            <div>
+              <strong
+                style={{
+                  color: "#2575fc",
+                  fontSize: "0.9rem",
+                  textTransform: "uppercase",
+                }}
+              >
+                PAN
+              </strong>
+              <p style={{ color: "#444", fontSize: "1rem" }}>
+                {user.pan || "N/A"}
+              </p>
+            </div>
+            <div>
+              <strong
+                style={{
+                  color: "#2575fc",
+                  fontSize: "0.9rem",
+                  textTransform: "uppercase",
+                }}
+              >
+                Aadhaar
+              </strong>
+              <p style={{ color: "#444", fontSize: "1rem" }}>
+                {user.adhaar || "N/A"}
+              </p>
+            </div>
+            <div>
+              <strong
+                style={{
+                  color: "#2575fc",
+                  fontSize: "0.9rem",
+                  textTransform: "uppercase",
+                }}
+              >
+                Designation
+              </strong>
+              <p style={{ color: "#444", fontSize: "1rem" }}>
+                {user.deg || "N/A"}
               </p>
             </div>
           </div>
