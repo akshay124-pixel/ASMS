@@ -197,9 +197,10 @@ const SalarySlipTable = ({ salarySlips, onDelete }) => {
                   <td style={{ padding: "1.4rem 2rem", color: "#1f2937" }}>
                     ₹{slip.salary}
                   </td>
+
                   <td style={{ padding: "1.4rem 2rem" }}>
                     <a
-                      href={slip.pdfUrl}
+                      href={`https://asmserver.onrender.com${slip.pdfUrl}`} // Prepend backend base URL
                       target="_blank"
                       rel="noopener noreferrer"
                       style={{
