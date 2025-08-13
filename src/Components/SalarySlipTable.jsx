@@ -200,9 +200,9 @@ const SalarySlipTable = ({ salarySlips, onDelete }) => {
 
                   <td style={{ padding: "1.4rem 2rem" }}>
                     <a
-                      href={`https://asmserver.onrender.com${slip.pdfUrl}`} // Prepend backend base URL
-                      target="_blank"
-                      rel="noopener noreferrer"
+                      href={`https://asmserver.onrender.com/download/${slip.pdfUrl
+                        .split("/")
+                        .pop()}`}
                       style={{
                         color: "#ffffff",
                         background: "linear-gradient(90deg, #3b82f6, #7c3aed)",
@@ -229,7 +229,6 @@ const SalarySlipTable = ({ salarySlips, onDelete }) => {
                           "0 3px 10px rgba(0, 0, 0, 0.15)";
                         e.target.style.transform = "scale(1)";
                       }}
-                      aria-label={`Download salary slip for ${slip.user} - ${slip.month}`}
                       download={`${slip.user}-${slip.month}-salary-slip.pdf`}
                     >
                       Download
