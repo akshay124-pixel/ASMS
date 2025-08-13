@@ -1,4 +1,3 @@
-// App.js
 import { useState, useEffect } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -6,6 +5,37 @@ import SalarySlipForm from "./Components/SalarySlipForm";
 import { FaPlus, FaFileExport } from "react-icons/fa";
 import SalarySlipTable from "./Components/SalarySlipTable";
 import * as XLSX from "xlsx";
+import "bootstrap/dist/css/bootstrap.min.css";
+
+// Reusable LoadingSpinner component
+const LoadingSpinner = () => (
+  <div
+    className="min-vh-100 d-flex align-items-center justify-content-center"
+    style={{
+      background: "linear-gradient(135deg, #e0e7ff, #c3dafe)",
+    }}
+  >
+    <div className="text-center">
+      <div
+        className="spinner-border text-primary"
+        style={{ width: "3rem", height: "3rem" }}
+        role="status"
+      >
+        <span className="visually-hidden">Loading...</span>
+      </div>
+      <div
+        className="mt-3"
+        style={{
+          fontSize: "1.2rem",
+          color: "#4b5563",
+          fontFamily: "'Roboto', sans-serif",
+        }}
+      >
+        Loading...
+      </div>
+    </div>
+  </div>
+);
 
 const App = () => {
   const [users, setUsers] = useState([]);
@@ -17,6 +47,7 @@ const App = () => {
   const [loading, setLoading] = useState(true);
   const [shouldRedirect, setShouldRedirect] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [success, setSuccess] = useState(false);
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
 
@@ -172,10 +203,9 @@ const App = () => {
     fetchData();
   }, [token]);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!selectedUser || !attendance || !month) {
-      toast.error("Please fill all fields", {
+  const handleSubmit = async (data) => {
+    if (!data.userId || !data.month || !data.daysWorked) {
+      toast.error("Please fill all required fields", {
         position: "top-right",
         autoClose: 3000,
         theme: "colored",
@@ -183,7 +213,7 @@ const App = () => {
       return;
     }
 
-    const user = users.find((u) => u._id === selectedUser);
+    const user = users.find((u) => u._id === data.userId);
     if (!user) {
       toast.error("Employee not found", {
         position: "top-right",
@@ -193,7 +223,7 @@ const App = () => {
       return;
     }
 
-    const daysWorked = parseInt(attendance);
+    const daysWorked = parseInt(data.daysWorked);
     if (daysWorked < 0 || daysWorked > 31) {
       toast.error("Invalid number of days", {
         position: "top-right",
@@ -202,9 +232,6 @@ const App = () => {
       });
       return;
     }
-
-    const dailySalary = user.baseSalary / 26;
-    const calculatedSalary = (dailySalary * daysWorked).toFixed(2);
 
     try {
       const response = await fetch(
@@ -215,7 +242,23 @@ const App = () => {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify({ userId: selectedUser, month, daysWorked }),
+          body: JSON.stringify({
+            userId: data.userId,
+            month: data.month,
+            daysWorked: data.daysWorked,
+            incomeTax: data.incomeTax || 0,
+            houseRentAllowance: data.houseRentAllowance || 0,
+            transportAllowance: data.travelAllowance || 0,
+            medicalAllowance: data.medicalAllowance || 0,
+            othersEarnings: data.othersEarnings || 0,
+            bonus: data.bonus || 0,
+            ot: data.ot || 0,
+            providentFund: data.providentFund || 0,
+            esi: data.esi || 0,
+            professionalTax: data.professionalTax || 0,
+            othersDeductions: data.othersDeductions || 0,
+            advance: data.advance || 0,
+          }),
         }
       );
       const result = await response.json();
@@ -225,19 +268,18 @@ const App = () => {
           {
             _id: result._id,
             user: user.username,
-            month,
+            month: data.month,
             days: daysWorked,
-            salary: calculatedSalary,
+            salary:
+              result.salary || ((user.baseSalary / 26) * daysWorked).toFixed(2),
             pdfUrl: result.pdfUrl,
           },
         ]);
         setError("");
-        setSelectedUser("");
-        setAttendance("");
-        setMonth("");
+        setSuccess(true);
         setIsModalOpen(false);
         toast.success(
-          `Salary slip generated for ${user.username} - ${month} - ₹${calculatedSalary}`,
+          `Salary slip generated for ${user.username} - ${data.month}`,
           {
             position: "top-right",
             autoClose: 3000,
@@ -260,34 +302,17 @@ const App = () => {
     }
   };
 
+  const resetSuccess = () => {
+    setSuccess(false);
+  };
+
   if (shouldRedirect) {
     localStorage.clear();
     return <Navigate to="/login" />;
   }
 
   if (loading) {
-    return (
-      <div
-        style={{
-          minHeight: "100vh",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          background: "linear-gradient(135deg, #e0e7ff, #c3dafe)",
-        }}
-      >
-        <div
-          style={{
-            fontSize: "1.5rem",
-            color: "#4b5563",
-            fontFamily: "'Roboto', sans-serif",
-            animation: "pulse 1.5s infinite",
-          }}
-        >
-          Loading...
-        </div>
-      </div>
-    );
+    return <LoadingSpinner />;
   }
 
   if (error) {
@@ -449,6 +474,8 @@ const App = () => {
         setMonth={setMonth}
         onClose={() => setIsModalOpen(false)}
         isModalOpen={isModalOpen}
+        success={success}
+        resetSuccess={resetSuccess}
       />
       <SalarySlipTable salarySlips={salarySlips} onDelete={handleDeleteSlip} />
     </div>
