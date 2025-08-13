@@ -9,7 +9,37 @@ import EditEmployeeModal from "./EditEmployeeModal.jsx";
 import DeleteConfirmationModal from "./DeleteConfirmationModal.jsx";
 import * as XLSX from "xlsx";
 import "../App.css";
+import "bootstrap/dist/css/bootstrap.min.css";
 import "./EmployeeDashboard.css";
+
+const LoadingSpinner = () => (
+  <div
+    className="min-vh-100 d-flex align-items-center justify-content-center"
+    style={{
+      background: "linear-gradient(135deg, #e0e7ff, #c3dafe)",
+    }}
+  >
+    <div className="text-center">
+      <div
+        className="spinner-border text-primary"
+        style={{ width: "3rem", height: "3rem" }}
+        role="status"
+      >
+        <span className="visually-hidden">Loading...</span>
+      </div>
+      <div
+        className="mt-3"
+        style={{
+          fontSize: "1.2rem",
+          color: "#4b5563",
+          fontFamily: "'Roboto', sans-serif",
+        }}
+      >
+        Loading...
+      </div>
+    </div>
+  </div>
+);
 
 const EmployeeDashboard = () => {
   const [users, setUsers] = useState([]);
@@ -59,7 +89,7 @@ const EmployeeDashboard = () => {
   }, []);
 
   const handleEdit = (user) => {
-    setEditingUser(user);
+    setEditingUser(user); // Set the new user to edit
     setEditModalOpen(true);
   };
 
@@ -183,9 +213,10 @@ const EmployeeDashboard = () => {
             theme: "colored",
           });
         }
+        // Reset editingUser and close modals
+        setEditingUser(null);
         setEditModalOpen(false);
         setAddModalOpen(false);
-        setEditingUser(null);
       } else {
         throw new Error(result.error || "Failed to save employee");
       }
@@ -255,30 +286,8 @@ const EmployeeDashboard = () => {
   };
 
   if (loading) {
-    return (
-      <div
-        style={{
-          minHeight: "100vh",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          backgroundImage: "linear-gradient(135deg, #e0e7ff, #c3dafe)",
-        }}
-      >
-        <div
-          style={{
-            fontSize: "1.5rem",
-            color: "#4b5563",
-            fontFamily: "'Roboto', sans-serif",
-            animation: "pulse 1.5s infinite",
-          }}
-        >
-          Loading...
-        </div>
-      </div>
-    );
+    return <LoadingSpinner />;
   }
-
   if (error) {
     return (
       <div
@@ -435,7 +444,7 @@ const EmployeeDashboard = () => {
         isOpen={editModalOpen}
         onClose={() => {
           setEditModalOpen(false);
-          setEditingUser(null);
+          setEditingUser(null); // Clear editingUser when closing modal
         }}
         onSubmit={handleEmployeeSubmit}
         initialData={editingUser}

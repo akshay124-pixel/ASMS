@@ -4,33 +4,45 @@ import { toast } from "react-toastify";
 
 const EditEmployeeModal = ({ isOpen, onClose, onSubmit, initialData }) => {
   const [formData, setFormData] = useState({
-    username: initialData?.username || "",
-    email: initialData?.email || "",
-    baseSalary: initialData?.baseSalary || "",
-    employeeid: initialData?.employeeid || "",
-    joindate: initialData?.joindate
-      ? new Date(initialData.joindate).toISOString().split("T")[0]
-      : "",
-    pan: initialData?.pan || "",
-    adhaar: initialData?.adhaar || "",
-    deg: initialData?.deg || "",
+    username: "",
+    email: "",
+    baseSalary: "",
+    employeeid: "",
+    joindate: "",
+    pan: "",
+    adhaar: "",
+    deg: "",
   });
 
-  // Sync form state whenever initialData or isOpen changes
+  // Sync form state whenever initialData changes
   useEffect(() => {
-    setFormData({
-      username: initialData?.username || "",
-      email: initialData?.email || "",
-      baseSalary: initialData?.baseSalary || "",
-      employeeid: initialData?.employeeid || "",
-      joindate: initialData?.joindate
-        ? new Date(initialData.joindate).toISOString().split("T")[0]
-        : "",
-      pan: initialData?.pan || "",
-      adhaar: initialData?.adhaar || "",
-      deg: initialData?.deg || "",
-    });
-  }, [initialData, isOpen]);
+    if (initialData) {
+      setFormData({
+        username: initialData.username || "",
+        email: initialData.email || "",
+        baseSalary: initialData.baseSalary || "",
+        employeeid: initialData.employeeid || "",
+        joindate: initialData.joindate
+          ? new Date(initialData.joindate).toISOString().split("T")[0]
+          : "",
+        pan: initialData.pan || "",
+        adhaar: initialData.adhaar || "",
+        deg: initialData.deg || "",
+      });
+    } else {
+      // Reset form when initialData is null/undefined
+      setFormData({
+        username: "",
+        email: "",
+        baseSalary: "",
+        employeeid: "",
+        joindate: "",
+        pan: "",
+        adhaar: "",
+        deg: "",
+      });
+    }
+  }, [initialData]); // Removed isOpen from dependency array
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -57,7 +69,6 @@ const EditEmployeeModal = ({ isOpen, onClose, onSubmit, initialData }) => {
     if (isNaN(formData.baseSalary) || formData.baseSalary <= 0) {
       return "Base salary must be a positive number";
     }
-
     if (formData.joindate && isNaN(Date.parse(formData.joindate))) {
       return "Invalid join date format";
     }
@@ -77,7 +88,6 @@ const EditEmployeeModal = ({ isOpen, onClose, onSubmit, initialData }) => {
     }
 
     try {
-      // Sanitize inputs
       const sanitizedData = {
         username: formData.username.trim(),
         email: formData.email.trim().toLowerCase(),
@@ -95,7 +105,7 @@ const EditEmployeeModal = ({ isOpen, onClose, onSubmit, initialData }) => {
         autoClose: 3000,
         theme: "colored",
       });
-      onClose();
+      onClose(); // Close modal after successful submission
     } catch (error) {
       toast.error(error.message || "Failed to update employee", {
         position: "top-right",
