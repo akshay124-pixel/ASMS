@@ -14,9 +14,8 @@ const EditEmployeeModal = ({ isOpen, onClose, onSubmit, initialData }) => {
     deg: "",
   });
 
-  // Sync form state whenever initialData changes
   useEffect(() => {
-    if (initialData) {
+    if (initialData && initialData._id) {
       setFormData({
         username: initialData.username || "",
         email: initialData.email || "",
@@ -30,7 +29,6 @@ const EditEmployeeModal = ({ isOpen, onClose, onSubmit, initialData }) => {
         deg: initialData.deg || "",
       });
     } else {
-      // Reset form when initialData is null/undefined
       setFormData({
         username: "",
         email: "",
@@ -42,7 +40,7 @@ const EditEmployeeModal = ({ isOpen, onClose, onSubmit, initialData }) => {
         deg: "",
       });
     }
-  }, [initialData]); // Removed isOpen from dependency array
+  }, [initialData]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -100,12 +98,7 @@ const EditEmployeeModal = ({ isOpen, onClose, onSubmit, initialData }) => {
       };
 
       await onSubmit(e, sanitizedData);
-      toast.success("Employee updated successfully", {
-        position: "top-right",
-        autoClose: 3000,
-        theme: "colored",
-      });
-      onClose(); // Close modal after successful submission
+      onClose();
     } catch (error) {
       toast.error(error.message || "Failed to update employee", {
         position: "top-right",
@@ -175,10 +168,7 @@ const EditEmployeeModal = ({ isOpen, onClose, onSubmit, initialData }) => {
             >
               <Form.Group>
                 <Form.Label
-                  style={{
-                    fontSize: "0.9rem",
-                    textTransform: "uppercase",
-                  }}
+                  style={{ fontSize: "0.9rem", textTransform: "uppercase" }}
                 >
                   Name
                 </Form.Label>
@@ -193,10 +183,7 @@ const EditEmployeeModal = ({ isOpen, onClose, onSubmit, initialData }) => {
               </Form.Group>
               <Form.Group>
                 <Form.Label
-                  style={{
-                    fontSize: "0.9rem",
-                    textTransform: "uppercase",
-                  }}
+                  style={{ fontSize: "0.9rem", textTransform: "uppercase" }}
                 >
                   Email
                 </Form.Label>
@@ -211,10 +198,7 @@ const EditEmployeeModal = ({ isOpen, onClose, onSubmit, initialData }) => {
               </Form.Group>
               <Form.Group>
                 <Form.Label
-                  style={{
-                    fontSize: "0.9rem",
-                    textTransform: "uppercase",
-                  }}
+                  style={{ fontSize: "0.9rem", textTransform: "uppercase" }}
                 >
                   Base Salary (₹)
                 </Form.Label>
@@ -229,10 +213,7 @@ const EditEmployeeModal = ({ isOpen, onClose, onSubmit, initialData }) => {
               </Form.Group>
               <Form.Group>
                 <Form.Label
-                  style={{
-                    fontSize: "0.9rem",
-                    textTransform: "uppercase",
-                  }}
+                  style={{ fontSize: "0.9rem", textTransform: "uppercase" }}
                 >
                   Employee ID
                 </Form.Label>
@@ -247,10 +228,7 @@ const EditEmployeeModal = ({ isOpen, onClose, onSubmit, initialData }) => {
               </Form.Group>
               <Form.Group>
                 <Form.Label
-                  style={{
-                    fontSize: "0.9rem",
-                    textTransform: "uppercase",
-                  }}
+                  style={{ fontSize: "0.9rem", textTransform: "uppercase" }}
                 >
                   Join Date
                 </Form.Label>
@@ -265,10 +243,7 @@ const EditEmployeeModal = ({ isOpen, onClose, onSubmit, initialData }) => {
               </Form.Group>
               <Form.Group>
                 <Form.Label
-                  style={{
-                    fontSize: "0.9rem",
-                    textTransform: "uppercase",
-                  }}
+                  style={{ fontSize: "0.9rem", textTransform: "uppercase" }}
                 >
                   PAN
                 </Form.Label>
@@ -283,10 +258,7 @@ const EditEmployeeModal = ({ isOpen, onClose, onSubmit, initialData }) => {
               </Form.Group>
               <Form.Group>
                 <Form.Label
-                  style={{
-                    fontSize: "0.9rem",
-                    textTransform: "uppercase",
-                  }}
+                  style={{ fontSize: "0.9rem", textTransform: "uppercase" }}
                 >
                   Aadhaar
                 </Form.Label>
@@ -301,10 +273,7 @@ const EditEmployeeModal = ({ isOpen, onClose, onSubmit, initialData }) => {
               </Form.Group>
               <Form.Group>
                 <Form.Label
-                  style={{
-                    fontSize: "0.9rem",
-                    textTransform: "uppercase",
-                  }}
+                  style={{ fontSize: "0.9rem", textTransform: "uppercase" }}
                 >
                   Designation
                 </Form.Label>

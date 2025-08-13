@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"; // Added useEffect import
+import { useState, useEffect } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 import { toast } from "react-toastify";
 
@@ -14,7 +14,6 @@ const AddEmployeeModal = ({ isOpen, onClose, onSubmit }) => {
     deg: "",
   });
 
-  // Reset formData when the modal is opened
   useEffect(() => {
     if (isOpen) {
       setFormData({
@@ -74,7 +73,6 @@ const AddEmployeeModal = ({ isOpen, onClose, onSubmit }) => {
     }
 
     try {
-      // Sanitize inputs
       const sanitizedData = {
         username: formData.username.trim(),
         email: formData.email.trim().toLowerCase(),
@@ -87,12 +85,6 @@ const AddEmployeeModal = ({ isOpen, onClose, onSubmit }) => {
       };
 
       await onSubmit(e, sanitizedData);
-      // Form data is already reset in useEffect when modal reopens
-      toast.success("Employee added successfully", {
-        position: "top-right",
-        autoClose: 3000,
-        theme: "colored",
-      });
       onClose();
     } catch (error) {
       toast.error(error.message || "Failed to add employee", {
@@ -163,10 +155,7 @@ const AddEmployeeModal = ({ isOpen, onClose, onSubmit }) => {
             >
               <Form.Group>
                 <Form.Label
-                  style={{
-                    fontSize: "0.9rem",
-                    textTransform: "uppercase",
-                  }}
+                  style={{ fontSize: "0.9rem", textTransform: "uppercase" }}
                 >
                   Name
                 </Form.Label>
@@ -181,10 +170,7 @@ const AddEmployeeModal = ({ isOpen, onClose, onSubmit }) => {
               </Form.Group>
               <Form.Group>
                 <Form.Label
-                  style={{
-                    fontSize: "0.9rem",
-                    textTransform: "uppercase",
-                  }}
+                  style={{ fontSize: "0.9rem", textTransform: "uppercase" }}
                 >
                   Email
                 </Form.Label>
@@ -199,10 +185,7 @@ const AddEmployeeModal = ({ isOpen, onClose, onSubmit }) => {
               </Form.Group>
               <Form.Group>
                 <Form.Label
-                  style={{
-                    fontSize: "0.9rem",
-                    textTransform: "uppercase",
-                  }}
+                  style={{ fontSize: "0.9rem", textTransform: "uppercase" }}
                 >
                   Base Salary (₹)
                 </Form.Label>
@@ -217,10 +200,7 @@ const AddEmployeeModal = ({ isOpen, onClose, onSubmit }) => {
               </Form.Group>
               <Form.Group>
                 <Form.Label
-                  style={{
-                    fontSize: "0.9rem",
-                    textTransform: "uppercase",
-                  }}
+                  style={{ fontSize: "0.9rem", textTransform: "uppercase" }}
                 >
                   Employee ID
                 </Form.Label>
@@ -235,10 +215,7 @@ const AddEmployeeModal = ({ isOpen, onClose, onSubmit }) => {
               </Form.Group>
               <Form.Group>
                 <Form.Label
-                  style={{
-                    fontSize: "0.9rem",
-                    textTransform: "uppercase",
-                  }}
+                  style={{ fontSize: "0.9rem", textTransform: "uppercase" }}
                 >
                   Join Date
                 </Form.Label>
@@ -253,10 +230,7 @@ const AddEmployeeModal = ({ isOpen, onClose, onSubmit }) => {
               </Form.Group>
               <Form.Group>
                 <Form.Label
-                  style={{
-                    fontSize: "0.9rem",
-                    textTransform: "uppercase",
-                  }}
+                  style={{ fontSize: "0.9rem", textTransform: "uppercase" }}
                 >
                   PAN
                 </Form.Label>
@@ -271,10 +245,7 @@ const AddEmployeeModal = ({ isOpen, onClose, onSubmit }) => {
               </Form.Group>
               <Form.Group>
                 <Form.Label
-                  style={{
-                    fontSize: "0.9rem",
-                    textTransform: "uppercase",
-                  }}
+                  style={{ fontSize: "0.9rem", textTransform: "uppercase" }}
                 >
                   Aadhaar
                 </Form.Label>
@@ -289,10 +260,7 @@ const AddEmployeeModal = ({ isOpen, onClose, onSubmit }) => {
               </Form.Group>
               <Form.Group>
                 <Form.Label
-                  style={{
-                    fontSize: "0.9rem",
-                    textTransform: "uppercase",
-                  }}
+                  style={{ fontSize: "0.9rem", textTransform: "uppercase" }}
                 >
                   Designation
                 </Form.Label>

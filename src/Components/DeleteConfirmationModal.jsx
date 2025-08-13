@@ -16,11 +16,29 @@ const DeleteConfirmationModal = ({ isOpen, onClose, onConfirm, userId }) => {
       return;
     }
 
+    if (!userId) {
+      toast.error("No user ID provided for deletion", {
+        position: "top-right",
+        autoClose: 3000,
+        theme: "colored",
+      });
+      return;
+    }
+
     setIsLoading(true);
-    await onConfirm();
-    setConfirmationText("");
-    setIsLoading(false);
-    onClose();
+    try {
+      await onConfirm(userId);
+    } catch (error) {
+      toast.error(error.message || "Failed to delete employee", {
+        position: "top-right",
+        autoClose: 3000,
+        theme: "colored",
+      });
+    } finally {
+      setIsLoading(false);
+      setConfirmationText("");
+      onClose();
+    }
   };
 
   return (
