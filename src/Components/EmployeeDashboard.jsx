@@ -69,6 +69,7 @@ const EmployeeDashboard = () => {
         throw new Error(data.error || "Failed to fetch employees");
       }
 
+      console.log("Fetched users:", data); // Debug log
       setUsers(data);
       setLoading(false);
     } catch (err) {
@@ -89,6 +90,7 @@ const EmployeeDashboard = () => {
 
   const handleEdit = (user) => {
     if (!user?._id) {
+      console.error("Invalid user for edit:", user); // Debug log
       toast.error("Invalid employee data", {
         position: "top-right",
         autoClose: 3000,
@@ -96,6 +98,7 @@ const EmployeeDashboard = () => {
       });
       return;
     }
+    console.log("Editing user:", user); // Debug log
     setEditingUser(user);
     setEditModalOpen(true);
   };
@@ -106,6 +109,7 @@ const EmployeeDashboard = () => {
 
   const handleDelete = (userId) => {
     if (!userId) {
+      console.error("No user ID provided for deletion"); // Debug log
       toast.error("No user ID provided", {
         position: "top-right",
         autoClose: 3000,
@@ -113,6 +117,7 @@ const EmployeeDashboard = () => {
       });
       return;
     }
+    console.log("Deleting user ID:", userId); // Debug log
     setUserIdToDelete(userId);
     setDeleteModalOpen(true);
   };
@@ -131,19 +136,20 @@ const EmployeeDashboard = () => {
         }
       );
 
+      const result = await response.json();
       if (!response.ok) {
-        const result = await response.json();
         throw new Error(result.error || "Failed to delete employee");
       }
 
-      await fetchUsers();
+      console.log("Delete response:", result); // Debug log
+      setUsers(users.filter((user) => user._id !== userId));
       toast.success("Employee deleted successfully", {
         position: "top-right",
         autoClose: 3000,
         theme: "colored",
       });
     } catch (err) {
-      console.error("Delete error:", err);
+      console.error("Delete error:", err); // Debug log
       toast.error(err.message || "Failed to delete employee", {
         position: "top-right",
         autoClose: 3000,
@@ -157,6 +163,7 @@ const EmployeeDashboard = () => {
 
   const handleView = (user) => {
     if (!user?._id) {
+      console.error("Invalid user for view:", user); // Debug log
       toast.error("Invalid employee data", {
         position: "top-right",
         autoClose: 3000,
@@ -164,6 +171,7 @@ const EmployeeDashboard = () => {
       });
       return;
     }
+    console.log("Viewing user:", user); // Debug log
     setSelectedUser(user);
     setViewModalOpen(true);
   };
@@ -218,11 +226,31 @@ const EmployeeDashboard = () => {
         }),
       });
       const result = await response.json();
+      console.log("Submit response:", result); // Debug log
       if (response.ok && result.data) {
-        if (!result.data._id) {
+        // Handle both `id` and `_id` for compatibility
+        const employeeId = result.data.id || result.data._id;
+        if (!employeeId) {
+          console.warn("Missing employee ID in response, refetching users..."); // Debug log
+          await fetchUsers(); // Fallback to refetching
           throw new Error("Server response missing employee ID");
         }
-        await fetchUsers();
+        // Normalize the employee object to use `_id`
+        const normalizedEmployee = {
+          ...result.data,
+          _id: employeeId,
+        };
+        if (editingUser) {
+          // Update existing user in the state
+          setUsers(
+            users.map((user) =>
+              user._id === employeeId ? normalizedEmployee : user
+            )
+          );
+        } else {
+          // Add new user to the state
+          setUsers([...users, normalizedEmployee]);
+        }
         toast.success(
           editingUser
             ? "Employee updated successfully"
@@ -240,7 +268,7 @@ const EmployeeDashboard = () => {
         throw new Error(result.error || "Failed to save employee");
       }
     } catch (err) {
-      console.error("Submit error:", err);
+      console.error("Submit error:", err); // Debug log
       toast.error(err.message || "Server error", {
         position: "top-right",
         autoClose: 3000,
