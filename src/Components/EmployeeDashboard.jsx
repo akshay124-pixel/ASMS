@@ -137,17 +137,18 @@ const EmployeeDashboard = () => {
       );
 
       const result = await response.json();
+      console.log("Delete response:", result); // Debug log
       if (!response.ok) {
         throw new Error(result.error || "Failed to delete employee");
       }
 
-      console.log("Delete response:", result); // Debug log
       setUsers(users.filter((user) => user._id !== userId));
       toast.success("Employee deleted successfully", {
         position: "top-right",
         autoClose: 3000,
         theme: "colored",
       });
+      console.log("Delete success toast triggered"); // Debug log
     } catch (err) {
       console.error("Delete error:", err); // Debug log
       toast.error(err.message || "Failed to delete employee", {
@@ -227,40 +228,52 @@ const EmployeeDashboard = () => {
       });
       const result = await response.json();
       console.log("Submit response:", result); // Debug log
-      if (response.ok && result.data) {
+      if (response.ok && result.success && result.data) {
         // Handle both `id` and `_id` for compatibility
         const employeeId = result.data.id || result.data._id;
         if (!employeeId) {
           console.warn("Missing employee ID in response, refetching users..."); // Debug log
-          await fetchUsers(); // Fallback to refetching
-          throw new Error("Server response missing employee ID");
-        }
-        // Normalize the employee object to use `_id`
-        const normalizedEmployee = {
-          ...result.data,
-          _id: employeeId,
-        };
-        if (editingUser) {
-          // Update existing user in the state
-          setUsers(
-            users.map((user) =>
-              user._id === employeeId ? normalizedEmployee : user
-            )
+          await fetchUsers();
+          toast.success(
+            editingUser
+              ? "Employee updated successfully (refetched)"
+              : "Employee added successfully (refetched)",
+            {
+              position: "top-right",
+              autoClose: 3000,
+              theme: "colored",
+            }
           );
+          console.log("Success toast triggered (refetch case)"); // Debug log
         } else {
-          // Add new user to the state
-          setUsers([...users, normalizedEmployee]);
-        }
-        toast.success(
-          editingUser
-            ? "Employee updated successfully"
-            : "Employee added successfully",
-          {
-            position: "top-right",
-            autoClose: 3000,
-            theme: "colored",
+          // Normalize the employee object to use `_id`
+          const normalizedEmployee = {
+            ...result.data,
+            _id: employeeId,
+          };
+          if (editingUser) {
+            // Update existing user in the state
+            setUsers(
+              users.map((user) =>
+                user._id === employeeId ? normalizedEmployee : user
+              )
+            );
+          } else {
+            // Add new user to the state
+            setUsers([...users, normalizedEmployee]);
           }
-        );
+          toast.success(
+            editingUser
+              ? "Employee updated successfully"
+              : "Employee added successfully",
+            {
+              position: "top-right",
+              autoClose: 3000,
+              theme: "colored",
+            }
+          );
+          console.log("Success toast triggered (normal case)"); // Debug log
+        }
         setEditingUser(null);
         setEditModalOpen(false);
         setAddModalOpen(false);
@@ -269,7 +282,7 @@ const EmployeeDashboard = () => {
       }
     } catch (err) {
       console.error("Submit error:", err); // Debug log
-      toast.error(err.message || "Server error", {
+      toast.error(err.message || "Failed to save employee", {
         position: "top-right",
         autoClose: 3000,
         theme: "colored",
@@ -322,6 +335,7 @@ const EmployeeDashboard = () => {
         autoClose: 3000,
         theme: "colored",
       });
+      console.log("Export success toast triggered"); // Debug log
     } catch (err) {
       console.error("Export error:", err);
       toast.error("Failed to export to Excel: " + err.message, {
@@ -727,7 +741,7 @@ const EmployeeDashboard = () => {
                           display: "flex",
                           alignItems: "center",
                           justifyContent: "center",
-
+                          background: "#f0ad4e",
                           border: "none",
                         }}
                       >
