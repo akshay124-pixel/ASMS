@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react"; // Added useEffect import
 import { Modal, Button, Form } from "react-bootstrap";
 import { toast } from "react-toastify";
 
@@ -13,6 +13,22 @@ const AddEmployeeModal = ({ isOpen, onClose, onSubmit }) => {
     adhaar: "",
     deg: "",
   });
+
+  // Reset formData when the modal is opened
+  useEffect(() => {
+    if (isOpen) {
+      setFormData({
+        username: "",
+        email: "",
+        baseSalary: "",
+        employeeid: "",
+        joindate: "",
+        pan: "",
+        adhaar: "",
+        deg: "",
+      });
+    }
+  }, [isOpen]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -39,7 +55,6 @@ const AddEmployeeModal = ({ isOpen, onClose, onSubmit }) => {
     if (isNaN(formData.baseSalary) || formData.baseSalary <= 0) {
       return "Base salary must be a positive number";
     }
-
     if (formData.joindate && isNaN(Date.parse(formData.joindate))) {
       return "Invalid join date format";
     }
@@ -72,16 +87,7 @@ const AddEmployeeModal = ({ isOpen, onClose, onSubmit }) => {
       };
 
       await onSubmit(e, sanitizedData);
-      setFormData({
-        username: "",
-        email: "",
-        baseSalary: "",
-        employeeid: "",
-        joindate: "",
-        pan: "",
-        adhaar: "",
-        deg: "",
-      });
+      // Form data is already reset in useEffect when modal reopens
       toast.success("Employee added successfully", {
         position: "top-right",
         autoClose: 3000,

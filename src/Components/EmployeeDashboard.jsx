@@ -89,7 +89,7 @@ const EmployeeDashboard = () => {
   }, []);
 
   const handleEdit = (user) => {
-    setEditingUser(user); // Set the new user to edit
+    setEditingUser(user);
     setEditModalOpen(true);
   };
 
@@ -166,7 +166,6 @@ const EmployeeDashboard = () => {
       if (isNaN(baseSalary) || baseSalary <= 0) {
         throw new Error("Base salary must be a positive number");
       }
-
       if (joindate && isNaN(Date.parse(joindate))) {
         throw new Error("Invalid join date format");
       }
@@ -205,6 +204,8 @@ const EmployeeDashboard = () => {
             autoClose: 3000,
             theme: "colored",
           });
+          setEditingUser(null); // Clear editingUser for edit modal
+          setEditModalOpen(false);
         } else {
           setUsers([...users, result.data]);
           toast.success("Employee added successfully", {
@@ -212,11 +213,8 @@ const EmployeeDashboard = () => {
             autoClose: 3000,
             theme: "colored",
           });
+          setAddModalOpen(false); // Close add modal
         }
-        // Reset editingUser and close modals
-        setEditingUser(null);
-        setEditModalOpen(false);
-        setAddModalOpen(false);
       } else {
         throw new Error(result.error || "Failed to save employee");
       }
@@ -444,7 +442,7 @@ const EmployeeDashboard = () => {
         isOpen={editModalOpen}
         onClose={() => {
           setEditModalOpen(false);
-          setEditingUser(null); // Clear editingUser when closing modal
+          setEditingUser(null);
         }}
         onSubmit={handleEmployeeSubmit}
         initialData={editingUser}
