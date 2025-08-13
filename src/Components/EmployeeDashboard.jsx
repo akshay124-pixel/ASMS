@@ -727,7 +727,7 @@ const EmployeeDashboard = () => {
                           display: "flex",
                           alignItems: "center",
                           justifyContent: "center",
-                          background: "#f0ad4e",
+
                           border: "none",
                         }}
                       >
