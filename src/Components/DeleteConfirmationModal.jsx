@@ -6,7 +6,7 @@ const DeleteConfirmationModal = ({ isOpen, onClose, onConfirm, userId }) => {
   const [confirmationText, setConfirmationText] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleConfirm = () => {
+  const handleConfirm = async () => {
     if (confirmationText !== "DELETE") {
       toast.error("Please type 'DELETE' to confirm!", {
         position: "top-right",
@@ -17,8 +17,10 @@ const DeleteConfirmationModal = ({ isOpen, onClose, onConfirm, userId }) => {
     }
 
     setIsLoading(true);
-    onConfirm(userId);
+    await onConfirm();
     setConfirmationText("");
+    setIsLoading(false);
+    onClose();
   };
 
   return (

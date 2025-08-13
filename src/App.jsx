@@ -248,7 +248,7 @@ const App = () => {
             daysWorked: data.daysWorked,
             incomeTax: data.incomeTax || 0,
             houseRentAllowance: data.houseRentAllowance || 0,
-            transportAllowance: data.travelAllowance || 0,
+            transportAllowance: data.transportAllowance || 0,
             medicalAllowance: data.medicalAllowance || 0,
             othersEarnings: data.othersEarnings || 0,
             bonus: data.bonus || 0,
