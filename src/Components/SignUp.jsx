@@ -4,8 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 
-function Signup() {
-  const navigate = useNavigate();
+function Signup({ onSignupSuccess }) {
   const [form, setFormData] = useState({
     username: "",
     email: "",
@@ -41,26 +40,17 @@ function Signup() {
         if (!user || !user.id || !user.username || !user.role) {
           throw new Error("Invalid user data in API response");
         }
-        localStorage.setItem("token", token);
-        localStorage.setItem("userId", user.id);
-        localStorage.setItem("role", user.role);
-        localStorage.setItem(
-          "user",
-          JSON.stringify({
-            id: user.id,
-            username: user.username,
-            email: user.email,
-            role: user.role,
-
-            assignedAdmin: user.assignedAdmin,
-          })
-        );
         toast.success("Signup successful! Redirecting...", {
           position: "top-right",
           autoClose: 3000,
           theme: "colored",
         });
-        navigate(user.role === "Accounts" ? "/accounts" : "/");
+        onSignupSuccess({
+          token,
+          userId: user.id,
+          role: user.role,
+          username: user.username,
+        });
       } else {
         toast.error("Unexpected response. Please try again.", {
           position: "top-right",
@@ -152,7 +142,6 @@ function Signup() {
                 {showPassword ? "Hide" : "Show"}
               </button>
             </div>
-
             <select
               name="role"
               style={{ backgroundColor: "white" }}

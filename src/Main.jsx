@@ -6,6 +6,8 @@ import {
   useLocation,
   Navigate,
 } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import Login from "./Components/Login";
 import Signup from "./Components/SignUp";
 import Navbar from "./Components/Navbar";
@@ -33,6 +35,19 @@ const Main = () => {
     [navigate]
   );
 
+  const handleSignupSuccess = useCallback(
+    ({ token, userId, role, username }) => {
+      localStorage.setItem("token", token);
+      localStorage.setItem("userId", userId);
+      localStorage.setItem("role", role);
+      localStorage.setItem("user", JSON.stringify({ username }));
+      setIsAuthenticated(true);
+      setUserRole(role);
+      navigate(role === "Accounts" ? "/accounts" : "/");
+    },
+    [navigate]
+  );
+
   const handleLogout = useCallback(() => {
     setIsAuthenticated(false);
     setUserRole("");
@@ -45,6 +60,18 @@ const Main = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-indigo-100">
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
       {showNavbar && (
         <Navbar
           isAuthenticated={isAuthenticated}
@@ -54,11 +81,14 @@ const Main = () => {
       )}
       <Routes>
         <Route path="/login" element={<Login onLogin={handleLogin} />} />
-        <Route path="/signup" element={<Signup onLogin={handleLogin} />} />
+        <Route
+          path="/signup"
+          element={<Signup onSignupSuccess={handleSignupSuccess} />}
+        />
         <Route path="/accounts" element={<App />} />
         <Route path="/employees" element={<EmployeeDashboard />} />
         <Route path="/" element={<Navigate to="/login" replace />} />
-      </Routes>{" "}
+      </Routes>
       <footer
         className="footer-container"
         style={{
