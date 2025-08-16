@@ -200,7 +200,7 @@ const SalarySlipTable = ({ salarySlips, onDelete }) => {
 
                   <td style={{ padding: "1.4rem 2rem" }}>
                     <a
-                      href={`https://asmserver.onrender.com/download/${slip.pdfUrl
+                      href={`${process.env.REACT_APP_URL}/download/${slip.pdfUrl
                         .split("/")
                         .pop()}`}
                       style={{

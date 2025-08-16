@@ -34,7 +34,7 @@ function Login({ onLogin }) {
     setLoading(true);
     try {
       const response = await axios.post(
-        "https://asmserver.onrender.com/auth/login",
+        `${process.env.REACT_APP_URL}/auth/login`,
         formData
       );
       if (response.status === 200) {

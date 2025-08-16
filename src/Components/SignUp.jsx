@@ -32,7 +32,7 @@ function Signup({ onSignupSuccess }) {
 
     try {
       const response = await axios.post(
-        "https://asmserver.onrender.com/user/signup",
+        `${process.env.REACT_APP_URL}/user/signup`,
         form
       );
       if (response.status === 201) {

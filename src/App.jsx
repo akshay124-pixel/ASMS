@@ -59,7 +59,7 @@ const App = () => {
 
     try {
       const response = await fetch(
-        `https://asmserver.onrender.com/api/salary-slips/${id}`,
+        `${process.env.REACT_APP_URL}/api/salary-slips/${id}`,
         {
           method: "DELETE",
           headers: {
@@ -155,10 +155,10 @@ const App = () => {
 
       try {
         const [usersResponse, slipsResponse] = await Promise.all([
-          fetch("https://asmserver.onrender.com/api/employees", {
+          fetch(`${process.env.REACT_APP_URL}/api/employees`, {
             headers: { Authorization: `Bearer ${token}` },
           }),
-          fetch("https://asmserver.onrender.com/api/salary-slips", {
+          fetch(`${process.env.REACT_APP_URL}/api/salary-slips`, {
             headers: { Authorization: `Bearer ${token}` },
           }),
         ]);
@@ -235,7 +235,7 @@ const App = () => {
 
     try {
       const response = await fetch(
-        "https://asmserver.onrender.com/api/salary-slip",
+        `${process.env.REACT_APP_URL}/api/salary-slip`,
         {
           method: "POST",
           headers: {

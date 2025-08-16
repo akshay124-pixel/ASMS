@@ -58,7 +58,7 @@ const EmployeeDashboard = () => {
         throw new Error("No authentication token found");
       }
       const response = await fetch(
-        "https://asmserver.onrender.com/api/employees",
+        `${process.env.REACT_APP_URL}/api/employees`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -129,7 +129,7 @@ const EmployeeDashboard = () => {
       }
 
       const response = await fetch(
-        `https://asmserver.onrender.com/api/delete-employees/${userId}`,
+        `${process.env.REACT_APP_URL}/api/delete-employees/${userId}`,
         {
           method: "DELETE",
           headers: { Authorization: `Bearer ${token}` },
@@ -206,8 +206,8 @@ const EmployeeDashboard = () => {
       }
 
       const url = editingUser
-        ? `https://asmserver.onrender.com/api/edit-employees/${editingUser._id}`
-        : "https://asmserver.onrender.com/api/add-employees";
+        ? `${process.env.REACT_APP_URL}/api/edit-employees/${editingUser._id}`
+        : `${process.env.REACT_APP_URL}/api/add-employees`;
       const method = editingUser ? "PUT" : "POST";
       const response = await fetch(url, {
         method,
