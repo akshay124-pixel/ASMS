@@ -23,7 +23,34 @@ const EmployeeDashboard = () => {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [userIdToDelete, setUserIdToDelete] = useState(null);
   const token = localStorage.getItem("token");
-
+  const LoadingSpinner = () => (
+    <div
+      className="min-vh-100 d-flex align-items-center justify-content-center"
+      style={{
+        background: "linear-gradient(135deg, #e0e7ff, #c3dafe)",
+      }}
+    >
+      <div className="text-center">
+        <div
+          className="spinner-border text-primary"
+          style={{ width: "3rem", height: "3rem" }}
+          role="status"
+        >
+          <span className="visually-hidden">Loading...</span>
+        </div>
+        <div
+          className="mt-3"
+          style={{
+            fontSize: "1.2rem",
+            color: "#4b5563",
+            fontFamily: "'Roboto', sans-serif",
+          }}
+        >
+          Loading...
+        </div>
+      </div>
+    </div>
+  );
   // Fetch employees from backend
   const fetchUsers = async () => {
     try {
@@ -255,30 +282,8 @@ const EmployeeDashboard = () => {
   };
 
   if (loading) {
-    return (
-      <div
-        style={{
-          minHeight: "100vh",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          backgroundImage: "linear-gradient(135deg, #e0e7ff, #c3dafe)",
-        }}
-      >
-        <div
-          style={{
-            fontSize: "1.5rem",
-            color: "#4b5563",
-            fontFamily: "'Roboto', sans-serif",
-            animation: "pulse 1.5s infinite",
-          }}
-        >
-          Loading...
-        </div>
-      </div>
-    );
+    return <LoadingSpinner />;
   }
-
   if (error) {
     return (
       <div
