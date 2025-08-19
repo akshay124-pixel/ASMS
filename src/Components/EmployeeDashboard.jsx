@@ -122,11 +122,11 @@ const EmployeeDashboard = () => {
 
       // Refetch users to ensure state is synchronized with backend
       await fetchUsers();
-      toast.success("Employee deleted successfully", {
-        position: "top-right",
-        autoClose: 3000,
-        theme: "colored",
-      });
+      // toast.success("Employee deleted successfully", {
+      //   position: "top-right",
+      //   autoClose: 3000,
+      //   theme: "colored",
+      // });
     } catch (err) {
       console.error("Delete error:", err.message, err.stack);
       toast.error(err.message || "Failed to delete employee", {
@@ -200,16 +200,16 @@ const EmployeeDashboard = () => {
       if (response.ok && result.data) {
         // Refetch employees to ensure state is synchronized with backend
         await fetchUsers();
-        toast.success(
-          editingUser
-            ? "Employee updated successfully"
-            : "Employee added successfully",
-          {
-            position: "top-right",
-            autoClose: 3000,
-            theme: "colored",
-          }
-        );
+        // toast.success(
+        //   editingUser
+        //     ? "Employee updated successfully"
+        //     : "Employee added successfully",
+        //   {
+        //     position: "top-right",
+        //     autoClose: 3000,
+        //     theme: "colored",
+        //   }
+        // );
         setEditModalOpen(false);
         setAddModalOpen(false);
         setEditingUser(null);
