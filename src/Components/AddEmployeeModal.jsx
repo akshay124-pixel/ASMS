@@ -82,11 +82,11 @@ const AddEmployeeModal = ({ isOpen, onClose, onSubmit }) => {
         adhaar: "",
         deg: "",
       });
-      toast.success("Employee added successfully", {
-        position: "top-right",
-        autoClose: 3000,
-        theme: "colored",
-      });
+      // toast.success("Employee added successfully", {
+      //   position: "top-right",
+      //   autoClose: 3000,
+      //   theme: "colored",
+      // });
       onClose();
     } catch (error) {
       toast.error(error.message || "Failed to add employee", {
